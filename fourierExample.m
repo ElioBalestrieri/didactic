@@ -1,7 +1,8 @@
 %% fourier example for saw function
 
 % the script shows approximation of a "saw function" via different order
-% fourier series
+% fourier series.
+% run the script and update with button press.
 
 clearvars;
 close all
