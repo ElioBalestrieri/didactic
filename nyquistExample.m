@@ -1,4 +1,6 @@
 %% nyquist example
+% the script shows how the sampling frequency changes the discrete representation of a continuous signal.
+% run the script and update with button press.
 
 clearvars;
 close all
@@ -20,7 +22,6 @@ legendCell{1} = 'signal to be sampled';
 legend(legendCell{1})
 title('nyquist demonstration')
 
-hold on
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % start loop approximation
