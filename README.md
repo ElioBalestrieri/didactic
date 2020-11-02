@@ -1,7 +1,7 @@
 # didactic
 
 This repo collects the scripts done for explaining -and understanding- better stuff.
-Widely a work in progress: I am still learning a lot of stuff as well.
+Widely a work in progress: I am still learning a lot of things as well.
 
 ## signal analysis
 
