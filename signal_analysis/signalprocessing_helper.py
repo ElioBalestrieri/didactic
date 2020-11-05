@@ -122,9 +122,83 @@ class InteractivePlotFourier:
         
         this_animation = animation.FuncAnimation(self.dyn_fig, self.update_visual,
                                                  nfreqs, interval=interval,
-                                                 blit=True, repeat=False)
+                                                 blit=True, repeat=True)
         
         return this_animation
     
     
+#%% plot Euler
+
+class InteractiveTransform:
+    
+    def __init__(self, x, original, transformed, freqsignal, freqtransform):
             
+        
+        title_fontsize = 20
+        label_fontsize = 16
+
+        
+        self.real_original = np.real(original)[:, np.newaxis]
+        self.imag_original = np.imag(original)[:, np.newaxis]
+        self.real_transformed = np.real(transformed)[:, np.newaxis]
+        self.imag_tranformed = np.imag(transformed)[:, np.newaxis]
+        
+        self.fig = plt.figure(figsize=[13, 9])
+        self.ax1 = plt.subplot(1, 2, 1)
+        
+        self.ax1.scatter(x, original, s=5, c='k')
+        plt.title('sinusoid frequency='+str(freqsignal), fontsize=title_fontsize)
+        
+        #%% now set the animation properly to show the transformation
+        self.diff_real = self.real_transformed-self.real_original
+        self.diff_imag = self.imag_tranformed-self.imag_original        
+        
+        self.step = 300 
+        self.interval = 30 # ms * step
+        
+        # get hanning taper to nicely smooth the animation at the edges
+        han = np.hanning(self.step)/np.hanning(self.step).sum()
+             
+        # paced differences
+        self.paced_diff_real = self.diff_real * han[np.newaxis, :]
+        self.paced_diff_imag = self.diff_imag * han[np.newaxis, :]
+        
+        # define second axes, and initialize scatterplot for dynamic transform later on
+        self.ax2 = plt.subplot(1, 2, 2)
+        plt.xlim(-2, 2)
+        plt.ylim(-2, 2)
+        plt.tight_layout()
+        plt.title('transform frequency='+str(freqtransform), fontsize=title_fontsize)
+
+
+        self.complexplane = self.ax2.scatter([], [], s=5, c='k')
+        self.ax2.set_aspect('equal')
+
+        plt.show()
+        
+        # cumsum paces
+        self.cumsum_real = self.real_original+ np.cumsum(self.paced_diff_real, axis=1)
+        self.cumsum_imag = self.imag_original+ np.cumsum(self.paced_diff_imag, axis=1)
+          
+    
+    def update_transform(self, istep):
+        
+        new_x = self.cumsum_real[:, istep]
+        new_y = self.cumsum_imag[:, istep]
+        
+        mat = np.concatenate((new_x[:,np.newaxis], new_y[:,np.newaxis]), axis=1)
+        
+        self.complexplane.set_offsets(mat)
+        
+        return self.complexplane,
+    
+
+    def start_animation(self):
+        
+        this_animation = animation.FuncAnimation(self.fig, self.update_transform,
+                                                 self.step, interval=self.interval,
+                                                 blit=True, repeat=False)
+
+
+        return this_animation
+    

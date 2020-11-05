@@ -125,9 +125,9 @@ plt.tight_layout()
 #%% ===========================================================================
 # INTERACTIVE PLOTTING
 # =============================================================================
-WriterClass = animation.writers['ffmpeg']
-writer = WriterClass(fps=3, metadata=dict(artist='Me'), bitrate=6000) # example default
+# WriterClass = animation.writers['ffmpeg']
+# writer = WriterClass(fps=3, metadata=dict(artist='Me'), bitrate=6000) # example default
 myplot = sigp.InteractivePlotFourier(signal, t, freqspace, T, spectra)
 animated_image = myplot.start_animation()
-animated_image.save('myvideo.mp4', writer=writer)
+# animated_image.save('myvideo.mp4', writer=writer)
 
